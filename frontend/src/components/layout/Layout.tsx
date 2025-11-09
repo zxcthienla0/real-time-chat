@@ -1,5 +1,3 @@
-// components/layout/Layout.tsx
-import React from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Button } from '../ui/Button';
 

@@ -17,14 +17,32 @@ export interface Conversation {
 
 export interface Message {
     id: string;
-    content: string;
-    messageType: 'text' | 'image' | 'file';
+    content?: string;
+    messageType: 'text' | 'image' | 'voice' | 'file';
+    fileUrl?: string;
+    fileSize?: number;
+    duration?: number;
+    mimeType?: string;
     senderId: number;
     conversationId: string;
     isEdited: boolean;
     isDeleted: boolean;
     createdAt: string;
-    sender: User;
+    sender: {
+        id: number;
+        email: string;
+        nickname: string;
+        avatar?: string;
+    };
+}
+
+export interface UploadedFile {
+    originalName: string;
+    filename: string;
+    path: string;
+    size: number;
+    mimeType: string;
+    url: string;
 }
 
 export interface AuthResponse {
@@ -32,3 +50,5 @@ export interface AuthResponse {
     refreshToken: string;
     user: User;
 }
+
+export type Timer = ReturnType<typeof setTimeout>;

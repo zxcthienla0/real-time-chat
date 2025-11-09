@@ -25,7 +25,12 @@ export const MessageList: React.FC<MessageListProps> = ({ messages }) => {
         setIsAutoScroll(isAtBottom);
     };
 
-    const sortedMessages = [...messages].sort((a, b) =>
+    const uniqueMessages = messages.reduce<Message[]>((acc, current) => {
+        const isDuplicate = acc.find(msg => msg.id === current.id);
+        return isDuplicate ? acc : [...acc, current];
+    }, []);
+
+    const sortedMessages = [...uniqueMessages].sort((a, b) =>
         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
     );
 

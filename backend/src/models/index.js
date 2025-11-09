@@ -2,9 +2,9 @@ const { Sequelize, DataTypes } = require('sequelize');
 const bcrypt = require('bcrypt');
 
 const sequelize = new Sequelize(
-    process.env.DB_NAME || 'testprisma',
-    process.env.DB_USER || 'postgres',
-    process.env.DB_PASSWORD || 'QweAsdZxc',
+    process.env.DB_NAME,
+    process.env.DB_USER,
+    process.env.DB_PASSWORD,
     {
         host: process.env.DB_HOST || 'localhost',
         port: process.env.DB_PORT || 5432,
@@ -153,13 +153,25 @@ const Message = sequelize.define('Message', {
     },
     content: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: true
     },
     messageType: {
-        type: DataTypes.ENUM('text', 'image', 'file'),
+        type: DataTypes.ENUM('text', 'image', 'file', 'voice'),
         defaultValue: 'text'
     },
     fileUrl: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    fileSize: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    duration: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    mimeType: {
         type: DataTypes.STRING,
         allowNull: true
     },

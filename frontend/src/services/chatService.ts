@@ -13,4 +13,7 @@ export const chatService = {
 
     sendMessage: (conversationId: string, content: string): Promise<Message> =>
         api.post('/messages', { conversationId, content }).then(res => res.data),
+
+    getOnlineUsers: (): Promise<number[]> =>
+        api.get('/users/online').then(res => res.data),
 };

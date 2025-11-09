@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Conversation } from '../../types';
 import { Avatar } from '../ui/Avatar';
 import { useAuth } from '../../contexts/AuthContext';

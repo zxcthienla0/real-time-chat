@@ -1,33 +1,53 @@
-import React, { useState } from 'react';
-import { useAuth } from '../../contexts/AuthContext'; // ← Добавляем импорт
+import { useState } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { chatService } from '../../services/chatService';
 import type { Conversation } from '../../types';
+import { Avatar } from '../ui/Avatar';
 
 interface SidebarProps {
     conversations: Conversation[];
     selectedConversation?: Conversation;
     onSelectConversation: (conversation: Conversation) => void;
     onNewConversation: (conversation: Conversation) => void;
+    onlineUsers: number[];
+    typingUsers: number[];
+    isConnected: boolean;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
                                                     conversations,
                                                     selectedConversation,
                                                     onSelectConversation,
-                                                    onNewConversation
+                                                    onNewConversation,
+                                                    onlineUsers,
+                                                    typingUsers,
+                                                    isConnected
                                                 }) => {
-    const { userId } = useAuth();
+    const { user } = useAuth();
     const [searchTerm, setSearchTerm] = useState('');
     const [showNewChat, setShowNewChat] = useState(false);
     const [newChatNickname, setNewChatNickname] = useState('');
     const [loading, setLoading] = useState(false);
 
     const getPartner = (conversation: Conversation) => {
-        if (!userId) return conversation.user1;
+        if (!user) return conversation.user1;
+        return conversation.user1Id === user.id ? conversation.user2 : conversation.user1;
+    };
 
-        return conversation.user1Id === userId ? conversation.user2 : conversation.user1;
+    const getPartnerStatus = (conversation: Conversation) => {
+        const partner = getPartner(conversation);
+        const isPartnerOnline = onlineUsers.includes(partner.id);
+        const isPartnerTyping = typingUsers.includes(partner.id);
+
+        return {
+            isOnline: isPartnerOnline,
+            isTyping: isPartnerTyping,
+            statusColor: !isConnected ? 'bg-yellow-500' :
+                isPartnerTyping ? 'bg-blue-500' :
+                    isPartnerOnline ? 'bg-green-500' : 'bg-gray-400'
+        };
     };
 
     const handleCreateChat = async () => {
@@ -51,9 +71,27 @@ export const Sidebar: React.FC<SidebarProps> = ({
         return partner.nickname.toLowerCase().includes(searchTerm.toLowerCase());
     });
 
+    const formatLastMessageTime = (dateString: string) => {
+        const date = new Date(dateString);
+        const now = new Date();
+        const isToday = date.toDateString() === now.toDateString();
+
+        if (isToday) {
+            return date.toLocaleTimeString('ru-RU', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        } else {
+            return date.toLocaleDateString('ru-RU', {
+                day: '2-digit',
+                month: '2-digit'
+            });
+        }
+    };
+
     return (
         <div className="w-80 bg-white border-r border-gray-200 flex flex-col h-full overflow-hidden">
-            <div className="p-4 border-b border-gray-200 flex-shrink-0">
+            <div className="p-4 border-b border-gray-200">
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-xl font-semibold text-gray-900">Диалоги</h2>
                     <Button
@@ -109,6 +147,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 ) : (
                     filteredConversations.map(conversation => {
                         const partner = getPartner(conversation);
+                        const status = getPartnerStatus(conversation);
 
                         return (
                             <div
@@ -119,23 +158,43 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                 onClick={() => onSelectConversation(conversation)}
                             >
                                 <div className="flex items-center space-x-3">
-                                    <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
-                                        <span className="text-gray-600 font-medium">
-                                            {partner.nickname.charAt(0).toUpperCase()}
-                                        </span>
+                                    <div className="relative flex-shrink-0">
+                                        <Avatar
+                                            src={partner.avatar}
+                                            alt={partner.nickname}
+                                            size="md"
+                                        />
+                                        <div
+                                            className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-white ${status.statusColor}`}
+                                        />
                                     </div>
+
                                     <div className="flex-1 min-w-0">
-                                        <p className="text-sm font-medium text-gray-900 truncate">
-                                            {partner.nickname}
-                                        </p>
-                                        {conversation.lastMessage && (
-                                            <p className="text-sm text-gray-500 truncate">
-                                                {conversation.lastMessage}
+                                        <div className="flex items-center justify-between">
+                                            <p className="text-sm font-medium text-gray-900 truncate">
+                                                {partner.nickname}
                                             </p>
-                                        )}
-                                        <p className="text-xs text-gray-400">
-                                            {new Date(conversation.lastMessageAt).toLocaleDateString()}
-                                        </p>
+                                            {conversation.lastMessageAt && (
+                                                <span className="text-xs text-gray-400 flex-shrink-0 ml-2">
+                                                    {formatLastMessageTime(conversation.lastMessageAt)}
+                                                </span>
+                                            )}
+                                        </div>
+
+                                        <div className="text-sm text-gray-500 truncate mt-1">
+                                            {status.isTyping ? (
+                                                <span className="text-blue-500 flex items-center space-x-1">
+                                                    <span>печатает</span>
+                                                    <div className="flex space-x-1">
+                                                        <div className="w-1 h-1 bg-blue-500 rounded-full animate-bounce"></div>
+                                                        <div className="w-1 h-1 bg-blue-500 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                                                        <div className="w-1 h-1 bg-blue-500 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                                                    </div>
+                                                </span>
+                                            ) : (
+                                                conversation.lastMessage || 'Нет сообщений'
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
