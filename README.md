@@ -29,7 +29,7 @@ docker-compose up --build
 ## ⚙️ Конфигурация
 **Переменные окружения Backend**
 ```env
-DB_NAME=testprisma
+DB_NAME=chatdb
 DB_USER=postgres
 DB_PASSWORD=your_password
 DB_HOST=localhost
