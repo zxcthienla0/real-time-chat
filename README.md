@@ -13,7 +13,7 @@
 Полнофункциональное веб-приложение для обмена сообщениями в реальном времени с использованием React, Node.js, WebSocket и PostgreSQL.
 
 ## 🚀 Быстрый запуск
-**Предварительные требования:** Docker и Docker Compose
+**Предварительные требования: Docker и Docker Compose**
 
 ```bash
 git clone https://github.com/zxcThienla0/real-time-chat.git
@@ -24,7 +24,7 @@ docker-compose up --build
 
 **Frontend: http://localhost:5173**
 
-**Backend API: http://localhost:3001**
+**Backend API: http://localhost:3000**
 
 ## ⚙️ Конфигурация
 **Переменные окружения Backend**
