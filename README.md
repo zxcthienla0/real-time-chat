@@ -19,3 +19,64 @@
 git clone https://github.com/zxcThienla0/real-time-chat.git
 cd real-time-chat
 docker-compose up --build
+```
+Доступ к приложению:
+
+**Frontend: http://localhost:5173**
+
+**Backend API: http://localhost:3001**
+
+## 🏗 Архитектура
+Приложение состоит из трех сервисов:
+
+**frontend** - React/Vite приложение (порт 5173)
+
+**backend** - Node.js/Express API (порт 3001)
+
+**database** - PostgreSQL (порт 5432)
+
+## 🛠 Технологический стек
+**Frontend**
+
+React 19, TypeScript, Tailwind CSS 4
+
+Vite, Socket.io Client, Axios
+
+**Backend**
+
+Node.js + Express 5, Socket.io 4.8.1
+
+PostgreSQL + Sequelize, JWT, bcrypt
+
+## 🎯 Функциональность
+🔐 Регистрация и авторизация
+
+💬 Обмен сообщениями в реальном времени
+
+👥 Онлайн-статусы пользователей
+
+📁 Загрузка файлов и изображений
+
+⌨️ Индикаторы набора текста
+
+##🔧 Ручная установка (без Docker)
+**Backend**
+
+```bash
+cd backend
+npm install
+npm start
+```
+
+**Frontend**
+
+```bash
+cd frontend
+npm install  
+npm run dev
+```
+
+## 📞 Контакты
+Telegram: @Thienla0o0
+Email: sburcalev@gmail.com
+GitHub: zxcThienla0
