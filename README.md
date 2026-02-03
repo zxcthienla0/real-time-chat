@@ -6,6 +6,7 @@
 <img src="https://img.shields.io/badge/Socket.io-4.8.1-010101?style=for-the-badge&logo=socket.io">
 <img src="https://img.shields.io/badge/PostgreSQL-15-4169E1?style=for-the-badge&logo=postgresql">
 <img src="https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge&logo=typescript">
+<img src="https://img.shields.io/badge/Vite-5-646CFF?style=for-the-badge&logo=vite" />
 <img src="https://img.shields.io/badge/Tailwind-4.1.16-06B6D4?style=for-the-badge&logo=tailwindcss">
 </div>
 
